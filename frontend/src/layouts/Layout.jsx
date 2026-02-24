@@ -1,3 +1,4 @@
+import React from 'react';
 import { NavLink, Link, Outlet } from 'react-router-dom';
 import { Globe, Accessibility, Search, MapPin, Phone, Mail, ChevronRight, Facebook, Twitter, Instagram, ExternalLink, Menu, X } from 'lucide-react';
 import ChatWidget from '../components/ChatWidget';

@@ -25,16 +25,19 @@ const Home = () => {
           backgroundImage: `url(${images[currentIdx]})`, 
           backgroundSize: 'cover', 
           backgroundPosition: 'center',
-          transition: 'background-image 1s ease-in-out'
+          transition: 'background-image 1s ease-in-out',
+          minHeight: '400px',
+          display: 'flex',
+          alignItems: 'center'
         }}
       >
         <div className="container">
-          <div className="hero-content">
-            <div className="hero-actions">
+          <div className="hero-content" style={{ textAlign: 'center' }}>
+            <div className="hero-actions" style={{ justifyContent: 'center' }}>
               <a href="https://gscc.jharkhand.gov.in/Student/Student" target="_blank" rel="noopener noreferrer" className="btn btn-accent apply-btn">
                 Apply Now <ArrowRight size={18} style={{ marginLeft: '5px' }} />
               </a>
-              <Link to="/about" className="btn know-more-btn">
+              <Link to="/about" className="btn know-more-btn" style={{ background: 'white', color: 'var(--primary-blue)' }}>
                 Know More
               </Link>
             </div>
