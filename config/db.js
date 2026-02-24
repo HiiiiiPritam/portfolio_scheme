@@ -29,13 +29,22 @@ export class DatabaseManager {
 
         const client = createRedisClient({ url });
         client.on('error', (err) => {
-            console.warn('[redis] client error:', err?.message || err);
+            // Log only once for same error type to avoid flooding logs
+            if (this._lastRedisError !== err.code) {
+                console.warn('[redis] client error:', err?.message || err);
+                this._lastRedisError = err.code;
+            }
         });
 
-        await client.connect();
-        console.log('[redis] connected for rate limiting');
-        this.redis = client;
-        return this.redis;
+        try {
+            await client.connect();
+            console.log('[redis] connected for rate limiting');
+            this.redis = client;
+            return this.redis;
+        } catch (error) {
+            console.warn('[redis] connection attempt failed; falling back to memory.');
+            return null;
+        }
     }
 
 

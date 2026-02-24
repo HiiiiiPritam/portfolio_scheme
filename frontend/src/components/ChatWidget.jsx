@@ -95,6 +95,13 @@ const ChatWidget = () => {
                 {msg.content}
               </div>
             ))}
+            {isLoading && (
+              <div className="typing">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            )}
             <div ref={messagesEndRef} />
           </div>
           <div className="chat-footer">
