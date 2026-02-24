@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink, Link, Outlet } from 'react-router-dom';
 import { Globe, Accessibility, Search, MapPin, Phone, Mail, ChevronRight, Facebook, Twitter, Instagram, ExternalLink, Menu, X } from 'lucide-react';
 import ChatWidget from '../components/ChatWidget';
@@ -6,7 +6,7 @@ import logoJh from '../assets/cheat1.png';
 import logoGscc from '../assets/cheat2.png';
 
 const Layout = () => {
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <div className="site-wrapper">
