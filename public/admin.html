@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel</title>
+    <style>
+        :root {
+            --primary: #274187;
+            --secondary: #6599cc;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --error: #ef4444;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        header {
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+            padding: 20px 24px;
+        }
+        header .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        header .header-content h1 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        header .header-content p {
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+        .logout-btn {
+            padding: 8px 16px;
+            background: transparent;
+            color: var(--primary);
+            border: 1px solid var(--border);
+            font-size: 13px;
+        }
+        .logout-btn:hover {
+            background: #f1f5f9;
+            border-color: var(--primary);
+        }
+
+        main.layout {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            gap: 24px;
+            padding: 24px;
+        }
+        @media(max-width:960px) {
+            main.layout { grid-template-columns: 1fr; }
+            .sidebar { display: none; }
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 24px;
+            align-self: flex-start;
+        }
+        .sidebar-inner {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+        .sidebar-inner h2 {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            padding: 16px 16px 12px;
+        }
+        .endpoint-nav {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .endpoint-nav button {
+            width: 100%;
+            text-align: left;
+            font-size: 13px;
+            padding: 10px 16px;
+            background: white;
+            border: none;
+            border-radius: 0;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.15s;
+            font-weight: 500;
+        }
+        .endpoint-nav button:hover {
+            background: #eef7ff;
+        }
+        .endpoint-nav button.active {
+            background: #eef7ff;
+        }
+
+        .endpoint-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .endpoint-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .method-chip {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            background: var(--primary);
+            color: white;
+            margin-right: 10px;
+            letter-spacing: 0.3px;
+        }
+        .endpoint-title {
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+        .meta-line {
+            font-size: 12px;
+            font-family: 'Courier New', monospace;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+        .description {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .help-text {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        textarea {
+            font-family: 'Courier New', monospace;
+            width: 100%;
+            border-radius: 6px;
+            padding: 12px;
+            border: 1px solid var(--border);
+            background: #fafbfc;
+            color: var(--text);
+            font-size: 12px;
+            resize: vertical;
+            min-height: 120px;
+            line-height: 1.5;
+        }
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+        }
+
+        pre {
+            font-family: 'Courier New', monospace;
+            width: 100%;
+            border-radius: 6px;
+            padding: 12px;
+            border: 1px solid var(--border);
+            background: #fafbfc;
+            color: var(--text);
+            font-size: 12px;
+            min-height: 100px;
+            max-height: 400px;
+            overflow: auto;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .response-panel {
+            margin-top: 16px;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        button {
+            border: none;
+            border-radius: 6px;
+            padding: 8px 16px;
+            background: var(--primary);
+            color: white;
+            font-weight: 500;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .controls button:hover:not(:disabled) {
+            background: #1e3570;
+        }
+        button:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .status-badge.idle {
+            background: #f1f5f9;
+            color: var(--text-muted);
+        }
+        .status-badge.pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        .status-badge.ok {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .status-badge.error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .response-meta {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="container">
+        <div class="header-content">
+            <h1>Admin Panel for the Jharkhand GSCC Assistant</h1>
+            <p>Monitor system health, manage data scraping, and trigger embeddings</p>
+        </div>
+        <button class="logout-btn" onclick="localStorage.removeItem('adminToken'); window.location.href='/admin/login';">Logout</button>
+    </div>
+</header>
+
+<main class="layout">
+    <aside class="sidebar">
+        <div class="sidebar-inner">
+            <h2>Endpoints</h2>
+            <div id="endpoint-nav" class="endpoint-nav"></div>
+        </div>
+    </aside>
+
+    <section class="endpoint-column">
+        <div class="endpoint-grid" id="endpoint-grid"></div>
+    </section>
+</main>
+
+<script>
+    const adminToken = localStorage.getItem('adminToken');
+    if(!adminToken) window.location.href = '/admin/login';
+
+    const endpoints = [
+        {id:'health',method:'GET',path:'/health',title:'Health Check',description:'Quick status probe for API and vector database status.'},
+        {id:'initialize',method:'POST',path:'/initialize',title:'Initialize RAG System',description:'Validate config & prime embeddings (Cohere + Pinecone).',sampleBody:{}},
+        {id:'embed-latest',method:'POST',path:'/embed-latest',title:'Embed Latest Dataset',description:'Load newest scrape JSON + local PDFs into Pinecone + Mongo.',sampleBody:{}},
+        {id:'scrape',method:'POST',path:'/scrape',title:'Scrape (Process Only)',description:'Crawls GSCC portal & merges local PDFs. Saves to JSON.',sampleBody:{force:false,maxPages:20,maxDepth:3,priorityUrls:['https://gscc.jharkhand.gov.in/Home/ContactUs'],restrictedUrls:[]}},
+        {id:'scrape-and-embed',method:'POST',path:'/scrape-and-embed',title:'Scrape + Embed',description:'Full pipeline: crawl, merge local PDFs & push to vector DB.',sampleBody:{force:false,maxPages:20,maxDepth:3}},
+        {id:'reset-storage',method:'POST',path:'/reset-storage',title:'Reset Storage',description:'Clears Pinecone index, Mongo change ledger, and semantic cache.',sampleBody:{}},
+        {id:'stats',method:'GET',path:'/stats',title:'System Stats',description:'Snapshots Pinecone, Mongo, cache, and scraper metadata.'},
+    ];
+
+    const grid = document.getElementById('endpoint-grid');
+    const nav = document.getElementById('endpoint-nav');
+    const navButtons = new Map();
+    const observedCards = [];
+
+    const createTextarea = (value) => {
+        const t = document.createElement('textarea');
+        t.value = value;
+        t.autocapitalize = 'off';
+        t.autocomplete = 'off';
+        t.spellcheck = false;
+        return t;
+    }
+
+    const formatJson = (payload) => {
+        if(payload === undefined || payload === null) return '';
+        if(typeof payload === 'string') return payload;
+        return JSON.stringify(payload, null, 2);
+    }
+
+    endpoints.forEach(endpoint => {
+        const card = document.createElement('section');
+        card.className = 'endpoint-card';
+        card.id = `endpoint-${endpoint.id}`;
+
+        const title = document.createElement('h2');
+        title.className = 'endpoint-title';
+        title.innerHTML = `<span class="method-chip">${endpoint.method}</span>${endpoint.title}`;
+        card.appendChild(title);
+
+        const meta = document.createElement('div');
+        meta.className = 'meta-line';
+        meta.textContent = endpoint.path;
+        card.appendChild(meta);
+
+        const desc = document.createElement('p');
+        desc.className = 'description';
+        desc.textContent = endpoint.description;
+        card.appendChild(desc);
+
+        let bodyInput = null;
+        if(endpoint.method !== 'GET' && endpoint.method !== 'HEAD') {
+            const help = document.createElement('p');
+            help.className = 'help-text';
+            help.textContent = 'Request Body (JSON)';
+            card.appendChild(help);
+
+            bodyInput = createTextarea(formatJson(endpoint.sampleBody ?? {example:'Add properties here'}));
+            card.appendChild(bodyInput);
+        }
+
+        const controls = document.createElement('div');
+        controls.className = 'controls';
+
+        const button = document.createElement('button');
+        button.textContent = 'Send Request';
+
+        const statusBadge = document.createElement('span');
+        statusBadge.className = 'status-badge idle';
+        statusBadge.textContent = 'Idle';
+
+        controls.appendChild(button);
+        controls.appendChild(statusBadge);
+        card.appendChild(controls);
+
+        const responsePanel = document.createElement('div');
+        responsePanel.className = 'response-panel';
+
+        const responseMeta = document.createElement('p');
+        responseMeta.className = 'response-meta';
+        responseMeta.textContent = 'No requests sent yet';
+
+        const responsePre = document.createElement('pre');
+        responsePre.textContent = '';
+
+        responsePanel.appendChild(responseMeta);
+        responsePanel.appendChild(responsePre);
+        card.appendChild(responsePanel);
+
+        button.addEventListener('click', async () => {
+            button.disabled = true;
+            responseMeta.textContent = 'Sending request...';
+            responsePre.textContent = '';
+            statusBadge.className = 'status-badge pending';
+            statusBadge.textContent = 'Pending';
+
+            const options = {
+                method: endpoint.method,
+                headers: {'Authorization': `Bearer ${adminToken}`}
+            };
+
+            if(bodyInput) {
+                const raw = bodyInput.value.trim();
+                let parsed = {};
+                if(raw.length) {
+                    try {
+                        parsed = JSON.parse(raw);
+                    } catch(err) {
+                        responseMeta.textContent = 'Invalid JSON in request body';
+                        responsePre.textContent = err.message;
+                        statusBadge.className = 'status-badge error';
+                        statusBadge.textContent = 'Error';
+                        button.disabled = false;
+                        return;
+                    }
+                }
+                options.headers['Content-Type'] = 'application/json';
+                options.body = JSON.stringify(parsed);
+            }
+
+            const start = performance.now();
+            try {
+                const res = await fetch(endpoint.path, options);
+                const duration = performance.now() - start;
+                const ct = res.headers.get('content-type') || '';
+                let payload;
+
+                if(ct.includes('application/json')) {
+                    payload = await res.json();
+                } else {
+                    payload = await res.text();
+                }
+
+                responseMeta.textContent = `HTTP ${res.status} • ${duration.toFixed(0)}ms`;
+                responsePre.textContent = formatJson(payload);
+
+                if(res.ok) {
+                    statusBadge.className = 'status-badge ok';
+                    statusBadge.textContent = 'Success';
+                } else {
+                    statusBadge.className = 'status-badge error';
+                    statusBadge.textContent = 'Error';
+                }
+            } catch(err) {
+                responseMeta.textContent = 'Request failed';
+                responsePre.textContent = err?.message || String(err);
+                statusBadge.className = 'status-badge error';
+                statusBadge.textContent = 'Error';
+            } finally {
+                button.disabled = false;
+            }
+        });
+
+        grid.appendChild(card);
+        observedCards.push(card);
+
+        const navBtn = document.createElement('button');
+        navBtn.type = 'button';
+        navBtn.textContent = endpoint.title;
+        navBtn.addEventListener('click', () => {
+            document.getElementById(card.id)?.scrollIntoView({behavior:'smooth', block:'start'});
+            navButtons.forEach(b => b.classList.remove('active'));
+            navBtn.classList.add('active');
+        });
+
+        nav.appendChild(navBtn);
+        navButtons.set(card.id, navBtn);
+        if(navButtons.size === 1) navBtn.classList.add('active');
+    });
+
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            const btn = navButtons.get(entry.target.id);
+            if(!btn) return;
+            if(entry.isIntersecting) {
+                navButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            }
+        })
+    }, {threshold: 0.4});
+
+    observedCards.forEach(c => observer.observe(c));
+</script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+node_modules
+.env
+/scraped_data
+/test
+
+# ide
+.vscode/
+.idea/
+*.swp
+*.swo
+
+todo
+
+# backup files
+*.backup
+
+# temporary files
+tmp*
+generate-hash.*
+
+# logs generated when compiling tex report
+*.log
+test*
+scraper/bin/
