@@ -5,8 +5,13 @@ import cookieParser from 'cookie-parser';
 
 export function setupMiddleware(app, __dirname) {
     // CORS configuration
+    const envUrl = process.env.FRONTEND_URL;
     const allowedOrigins = process.env.NODE_ENV === 'production'
-        ? (process.env.FRONTEND_URL === '*' ? true : [process.env.FRONTEND_URL, 'https://gurujicreditcard.in'].filter(Boolean))
+        ? (envUrl === '*' ? true : [
+            envUrl,
+            'https://gurujicreditcard.in',
+            'https://www.gurujicreditcard.in'
+          ].filter(Boolean))
         : [
             'http://localhost:3000',
             'http://127.0.0.1:3000',
@@ -14,6 +19,8 @@ export function setupMiddleware(app, __dirname) {
             'http://127.0.0.1:5500',
             'http://localhost:5173',
         ];
+
+    console.log(`[CORS] Initialized with origin: ${envUrl === '*' ? 'ANY (*)' : allowedOrigins}`);
 
     app.use(
         cors({
