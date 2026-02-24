@@ -1,15 +1,16 @@
-import React from 'react';
 import { NavLink, Link, Outlet } from 'react-router-dom';
-import { Globe, Accessibility, Search, MapPin, Phone, Mail, ChevronRight, Facebook, Twitter, Instagram, ExternalLink } from 'lucide-react';
+import { Globe, Accessibility, Search, MapPin, Phone, Mail, ChevronRight, Facebook, Twitter, Instagram, ExternalLink, Menu, X } from 'lucide-react';
 import ChatWidget from '../components/ChatWidget';
 import logoJh from '../assets/cheat1.png';
 import logoGscc from '../assets/cheat2.png';
 
 const Layout = () => {
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+
   return (
     <div className="site-wrapper">
       {/* Top Bar */}
-      <div className="top-bar">
+      <div className="top-bar desktop-only">
         <div className="container top-bar-content">
           <div className="top-bar-left">
             <span>Government of Jharkhand</span>
@@ -33,21 +34,33 @@ const Layout = () => {
             />
             <div className="logo-text">
               <h1>Guruji Student Credit Card Scheme</h1>
-              <p>Department of Higher and Technical Education</p>
+              <p className="desktop-only">Department of Higher and Technical Education</p>
             </div>
             
           </Link>
 
-          <nav className="nav-menu">
-            <NavLink to="/" end>Home</NavLink>
-            <NavLink to="/about">About Scheme</NavLink>
-            <NavLink to="/institutions">Institutions</NavLink>
-            <NavLink to="/banks">Banks</NavLink>
-            <NavLink to="/faq">FAQ</NavLink>
-            <NavLink to="/contact">Contact Us</NavLink>
+          <button 
+            className="mobile-only menu-toggle" 
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+
+          <nav className={`nav-menu ${isMenuOpen ? 'mobile-nav-active' : ''}`}>
+            <NavLink to="/" end onClick={() => setIsMenuOpen(false)}>Home</NavLink>
+            <NavLink to="/about" onClick={() => setIsMenuOpen(false)}>About Scheme</NavLink>
+            <NavLink to="/institutions" onClick={() => setIsMenuOpen(false)}>Institutions</NavLink>
+            <NavLink to="/banks" onClick={() => setIsMenuOpen(false)}>Banks</NavLink>
+            <NavLink to="/faq" onClick={() => setIsMenuOpen(false)}>FAQ</NavLink>
+            <NavLink to="/contact" onClick={() => setIsMenuOpen(false)}>Contact Us</NavLink>
+            <div className="mobile-only mobile-auth-buttons">
+              <a href="https://gscc.jharkhand.gov.in/Student/Student" target="_blank" rel="noopener noreferrer" className="btn btn-primary">Login</a>
+              <a href="https://gscc.jharkhand.gov.in/Student/Student/Registration" target="_blank" rel="noopener noreferrer" className="btn btn-accent">Registration</a>
+            </div>
           </nav>
 
-          <div style={{ display: 'flex', gap: '10px' }}>
+          <div className="desktop-only header-buttons">
             <a href="https://gscc.jharkhand.gov.in/Student/Student" target="_blank" rel="noopener noreferrer" className="btn btn-primary">Login</a>
             <a href="https://gscc.jharkhand.gov.in/Student/Student/Registration" target="_blank" rel="noopener noreferrer" className="btn btn-accent">Registration</a>
           </div>

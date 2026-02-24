@@ -30,11 +30,11 @@ const Home = () => {
       >
         <div className="container">
           <div className="hero-content">
-            <div style={{ display: 'flex', gap: '15px', marginTop: '150px' }}>
-              <a href="https://gscc.jharkhand.gov.in/Student/Student" target="_blank" rel="noopener noreferrer" className="btn btn-accent" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }}>
+            <div className="hero-actions">
+              <a href="https://gscc.jharkhand.gov.in/Student/Student" target="_blank" rel="noopener noreferrer" className="btn btn-accent apply-btn">
                 Apply Now <ArrowRight size={18} style={{ marginLeft: '5px' }} />
               </a>
-              <Link to="/about" className="btn" style={{ background: 'white', color: 'var(--primary-blue)', textDecoration: 'none' }}>
+              <Link to="/about" className="btn know-more-btn">
                 Know More
               </Link>
             </div>
@@ -44,7 +44,7 @@ const Home = () => {
 
       {/* Stats Banner */}
       <div className="stats-banner">
-        <div className="container stats-grid" style={{ color: '#24394dff' }}>
+        <div className="container stats-grid">
           <div className="stat-box">
             <h3>49,162</h3>
             <p>Applications Received</p>
@@ -65,63 +65,62 @@ const Home = () => {
       </div>
 
       {/* Application Process */}
-      <section style={{ padding: '80px 0', background: '#fff' }}>
+      <section className="application-process">
         <div className="container">
           <div className="section-header">
             <h2>Application Process</h2>
-            <p style={{ color: '#666' }}>Simple steps to secure your educational future</p>
+            <p className="section-subtitle">Simple steps to secure your educational future</p>
             <div className="title-underline"></div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '30px' }}>
-            <div style={{ background: '#f8f9fa', padding: '40px', borderRadius: '10px', textAlign: 'center', border: '1px solid #eee' }}>
-              <div style={{ color: 'var(--primary-blue)', marginBottom: '20px' }}><UserCheck size={48} /></div>
-              <h3 style={{ marginBottom: '15px', color: 'var(--secondary-blue)' }}>1. Check Eligibility</h3>
-              <p style={{ fontSize: '0.9rem', color: '#555' }}>Indian national, completed Class 10th in Jharkhand, and secured admission in ranked institutions.</p>
+          <div className="process-grid">
+            <div className="process-card">
+              <div className="process-icon"><UserCheck size={48} /></div>
+              <h3 className="process-title">1. Check Eligibility</h3>
+              <p className="process-desc">Indian national, completed Class 10th in Jharkhand, and secured admission in ranked institutions.</p>
             </div>
-            <div style={{ background: '#f8f9fa', padding: '40px', borderRadius: '10px', textAlign: 'center', border: '1px solid #eee' }}>
-              <div style={{ color: 'var(--primary-blue)', marginBottom: '20px' }}><FileText size={48} /></div>
-              <h3 style={{ marginBottom: '15px', color: 'var(--secondary-blue)' }}>2. Documentation</h3>
-              <p style={{ fontSize: '0.9rem', color: '#555' }}>Upload Aadhar, Class 10/12 certificates, admission receipt, and co-borrower details.</p>
+            <div className="process-card">
+              <div className="process-icon"><FileText size={48} /></div>
+              <h3 className="process-title">2. Documentation</h3>
+              <p className="process-desc">Upload Aadhar, Class 10/12 certificates, admission receipt, and co-borrower details.</p>
             </div>
-            <div style={{ background: '#f8f9fa', padding: '40px', borderRadius: '10px', textAlign: 'center', border: '1px solid #eee' }}>
-              <div style={{ color: 'var(--primary-blue)', marginBottom: '20px' }}><Landmark size={48} /></div>
-              <h3 style={{ marginBottom: '15px', color: 'var(--secondary-blue)' }}>3. Sanctioning</h3>
-              <p style={{ fontSize: '0.9rem', color: '#555' }}>Member Lending Institutions (Banks) process and approve your loan with state guarantee.</p>
+            <div className="process-card">
+              <div className="process-icon"><Landmark size={48} /></div>
+              <h3 className="process-title">3. Sanctioning</h3>
+              <p className="process-desc">Member Lending Institutions (Banks) process and approve your loan with state guarantee.</p>
             </div>
-            <div style={{ background: '#f8f9fa', padding: '40px', borderRadius: '10px', textAlign: 'center', border: '1px solid #eee' }}>
-              <div style={{ color: 'var(--primary-blue)', marginBottom: '20px' }}><RefreshCw size={48} /></div>
-              <h3 style={{ marginBottom: '15px', color: 'var(--secondary-blue)' }}>4. Disbursement</h3>
-              <p style={{ fontSize: '0.9rem', color: '#555' }}>Loan disbursed directly for tuition, hostel, and other educational expenses.</p>
+            <div className="process-card">
+              <div className="process-icon"><RefreshCw size={48} /></div>
+              <h3 className="process-title">4. Disbursement</h3>
+              <p className="process-desc">Loan disbursed directly for tuition, hostel, and other educational expenses.</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* About the Scheme Summary */}
-      <section style={{ padding: '80px 0', background: '#ffffffff' }}>
-        <div className="container" style={{ display: 'flex', gap: '50px', alignItems: 'center' }}>
-          <div style={{ flex: 1 }}>
+      <section className="about-summary">
+        <div className="container about-summary-content">
+          <div className="about-image-wrapper">
             <img 
               src={logoJh3} 
               alt="About GSCC" 
-              style={{ width: '100%', borderRadius: '10px' }}
+              className="about-image"
             />
           </div>
-          <div style={{ flex: 1 }}>
-            <h2 style={{ color: 'var(--secondary-blue)', fontSize: '2rem', marginBottom: '20px' }}>What is the Guruji Student Credit Card Scheme?</h2>
-            <p style={{ marginBottom: '20px', color: '#444' }}>
+          <div className="about-text-content">
+            <h2 className="about-title">What is the Guruji Student Credit Card Scheme?</h2>
+            <p className="about-desc">
               The objective of this scheme is to offer financial aid from the State Government to students who have successfully completed their education in organized schools within Jharkhand. This assistance entails nominal interest rates, accompanied by appropriate guarantees to the bank.
             </p>
-            <p style={{ marginBottom: '30px', color: '#444' }}>
+            <p className="about-desc">
               Loans up to ₹15 Lakhs are provided at 4% simple interest with a 15-year repayment period and a 1-year moratorium.
             </p>
             <a 
               href="https://gscc.jharkhand.gov.in/sample%20files/guruji_guidelines.pdf" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="btn btn-primary"
-              style={{ textDecoration: 'none', display: 'inline-block' }}
+              className="btn btn-primary download-btn"
             >
               Download Guidelines (PDF)
             </a>
