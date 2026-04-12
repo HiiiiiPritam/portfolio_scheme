@@ -19,6 +19,35 @@ function extractChatResponseFields(finalResponse) {
 
 export function setupChatRoutes(app, server) {
 
+    // GET chat history for a session — used by frontend on mount to restore UI
+    app.get('/chat-history/:sessionId', async (req, res) => {
+        try {
+            const { sessionId } = req.params;
+            if (!sessionId || sessionId.trim().length === 0) {
+                return res.status(400).json({ success: false, error: 'sessionId is required' });
+            }
+
+            if (!server.chatHistory) {
+                return res.json({ success: true, messages: [] });
+            }
+
+            const history = await server.chatHistory.getHistory(sessionId.trim());
+
+            // Convert server-side role format → widget format (bot/user)
+            const messages = history.map(msg => ({
+                role: msg.role === 'assistant' ? 'bot' : 'user',
+                content: msg.content,
+                at: msg.at,
+            }));
+
+            return res.json({ success: true, messages });
+        } catch (error) {
+            console.error('[chat-history] Error:', error);
+            return res.status(500).json({ success: false, error: error.message });
+        }
+    });
+
+
     // SET user's language preference
     app.post('/set-language', async (req, res) => {
         try {
@@ -109,9 +138,10 @@ export function setupChatRoutes(app, server) {
                 const redis = await server.dbManager.connectRedis().catch(() => null);
                 server._chatRateLimiter = createRateLimiter({
                     redis,
-                    windowSeconds: 60,
-                    maxGlobal: 10,
-                    maxPerSession: 2,
+                    globalCapacity:    300,  // Max burst across all users
+                    globalRefillRate:  5,    // Sustained: 5 req/sec = 300/min
+                    sessionCapacity:   15,   // Max burst per user
+                    sessionRefillRate: 0.25, // Sustained: 1 msg per 4s = 15/min
                     prefix: 'rl:chat:v1:',
                 });
             }

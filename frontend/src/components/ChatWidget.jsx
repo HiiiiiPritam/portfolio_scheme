@@ -1,14 +1,49 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { MessageSquare, Send, X, Bot, User } from 'lucide-react';
 
+const getOrCreateSessionId = () => {
+  const KEY = 'gscc_session_id';
+  let id = localStorage.getItem(KEY);
+  if (!id) {
+    id = crypto.randomUUID();
+    localStorage.setItem(KEY, id);
+  }
+  return id;
+};
+
+const WELCOME_MSG = { role: 'bot', content: 'Namaste! Welcome to Guruji Student Credit Card (GSCC) Support. How can I assist you today?' };
+
 const ChatWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState([
-    { role: 'bot', content: 'Namaste! Welcome to Guruji Student Credit Card (GSCC) Support. How can I assist you today?' }
-  ]);
+  const [messages, setMessages] = useState([WELCOME_MSG]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
+  const sessionId = useRef(getOrCreateSessionId());
+
+  // On mount: fetch existing history from the server so new tabs see previous conversation
+  useEffect(() => {
+    const fetchHistory = async () => {
+      try {
+        const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || '';
+        const res = await fetch(`${apiBaseUrl}/api/chat-history/${sessionId.current}`, {
+          credentials: 'include',
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data.success && Array.isArray(data.messages) && data.messages.length > 0) {
+          // History is stored newest-first in Redis, getHistory() reverses it to chronological.
+          // Prepend the welcome message so it always appears first.
+          setMessages([WELCOME_MSG, ...data.messages]);
+        }
+      } catch {
+        // Network error or server down — silently stay with the welcome message
+      }
+    };
+    fetchHistory();
+  }, []); // empty deps → runs once on mount only
+
+
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -34,7 +69,7 @@ const ChatWidget = () => {
         credentials: 'include',
         body: JSON.stringify({
           question: input,
-          sessionId: 'gscc-high-fidelity-v1',
+          sessionId: sessionId.current,
           language: 'english'
         })
       });
